@@ -178,43 +178,6 @@
             }    
         }
 
-    </style>
-    <script>
-        
-        function countMoves(numbers) {
-            // Write your code here
-            let moves = 0;
-            while(!numbers.every(item => item === numbers[0]) || moves > 10) {
-                for(let i = 0; i < numbers.length; i++) {
-                    if(numbers.indexOf(Math.max(...numbers)) !== i) {
-                        numbers[i] += 1;
-                    }
-                }
-
-                console.log('In WHile');
-                moves += 1;                
-            }
-            
-            console.log(moves);
-        }
-
-        numbers = [3, 4, 6, 6, 4];
-        //countMoves(numbers);
-
-        // for(let i = 0; i < numbers.length; i++) {
-        //     if(numbers.indexOf(Math.max(...numbers)) !== i) {
-        //         numbers[i] += 1;
-        //     }
-        // }
-        console.log(numbers)
-        console.log(numbers.indexOf(Math.max(...numbers)))
-
-        // if(numbers.every(item => item === numbers[0])) {
-        //     console.log('True');
-        // } else {
-        //     console.log('False')
-        // }
-        
-    </script>
+    </style>   
 </body>
 </html>
