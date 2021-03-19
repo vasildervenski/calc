@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="card">
+            <div>Разстояние</div>
+            <input type="text" class="distance">
+        </div>
+        <div class="card" >
+            <div>Тонаж</div>
+            <input class="weight" type="text">
+        </div>
+        <div class="card">
+            <div>Отстъпка</div>
+            <input class="discount" type="text">
+        </div>
+        <div class="card">
+            <div>Център</div>
+            <select class="center">
+                <option value="1">Да</option>
+                <option selected="selected" value="0">Не</option>               
+            </select>
+        </div>
+        <div class="card">
+            <div>Фактура</div>
+            <select class="invoice">
+                <option value="1">Да</option>
+                <option selected="selected" value="0">Не</option>               
+            </select>
+        </div>
+        <div class="card">
+            <div>Отпадък</div>
+            <select class="waste">
+                <option selected="selected" value="0.01">Смесен</option>
+                <option value="0.003">Бетон</option>
+                <option value="0.006">Керамика</option>
+                <option value="0.006">Тухли</option>
+                <option value="0.006">Бетон, Тухли, Керамика</option>
+                <option value="0.0035">Асфалт</option>
+                <option value="0.03">Пластмаса</option>
+                <option value="0.0015">Почва</option>
+                <option value="0.025">Изолация</option>
+                <option value="0.03">Хартия</option>
+                <option value="0.03">Стъкло</option>
+                <option value="0.03">Дърво</option>
+            </select>
+        </div>
+        <div class="card"> 
+            <div>Цена</div>
+            <div class="price">0.00</div>
+            <div class="lv">лв.</div>
+        </div>
+        <!-- <div class="card">SIX</div>
+        <div class="card">SEVEN</div>
+        <div class="card">EIGHT</div>
+        <div class="card">NINE</div>
+        <div class="card">TEN</div>
+        <div class="card">ELEVEN</div>
+        <div class="card">TWELVE</div> -->
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.discount, .waste, .weight, .distance, .center, .invoice').on('change', function(e) {
+                console.log($('.waste').val(), $('.weight').val(), $('.discount').val(), $('.distance').val());
+                let price = CalculatePrice($('.waste').val(), $('.weight').val(), $('.discount').val(), $('.distance').val(), $('.center').val(), $('.invoice').val());
+                $('.price').text(price.toFixed(2));
+                
+            });
+
+            function CalculatePrice(waste, weight, discount, distance, center, invoice) {    
+                let price = waste * weight + distancePrice(distance, center, discount);
+                price = invoicedPrice(invoice, price);
+
+                return price;
+            }
+
+            function distancePrice(distance, center, discount) {
+                let distanceFee;
+                if(center == 1) {
+                    distanceFee = 95.00;
+                } else if(distance <= 15000) {
+                    distanceFee = 80.00;
+                } else if(distance > 15000 && distance <= 20000) {
+                    distanceFee = 95.00;
+                } else if(distance > 20000) {
+                    distanceFee = 120.00;
+                }
+
+                if(discount != 0) {
+                    distanceFee = distanceFee - (distanceFee*discount)/100;
+                }
+
+                return distanceFee;
+            }
+
+            function invoicedPrice(invoice, price) {                
+                if(invoice == 1) {
+                    price += (price * 20) / 100;
+                }
+
+                return price;
+            }
+        });
+    </script>
+
+    <style>
+        select, input {
+            width: 100%;
+        }
+
+        .price {
+            margin-left: 6px;
+        }
+
+        div.lv {
+            margin-left: 5px;
+        }
+
+        .card>div {
+            margin-bottom: 4px;
+        }
+
+        body {
+            font-family: fantasy;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(100px, 250px));
+            gap: 10px;
+            justify-content: center;
+            align-content: center;
+            height: 100vh;
+            background: url(https://mysmet.bg/landing-res/images/landing-top.png);
+        }
+
+        .card {
+            color: white;
+            background: #F39317;
+            padding: 1rem 2rem;
+            border: 1px solid ghostwhite
+        }
+
+        .card:nth-child(7) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-row: 1 / 3;
+            grid-column: 4 / 5;
+            font-size: 20px;
+        }
+
+        @media (max-width:615px) {
+            .card:nth-child(7) {                
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width:424px) {
+            .card:nth-child(7) {                
+                flex-direction: row;
+                grid-row: 3 / 4;
+                grid-column: 1 / 4;
+            }
+
+            .grid-container {                
+                grid-template-columns: repeat(3, minmax(80px, 250px));
+                gap: 2px;
+            }    
+        }
+
+    </style>
+    <script>
+        
+        function countMoves(numbers) {
+            // Write your code here
+            let moves = 0;
+            while(!numbers.every(item => item === numbers[0]) || moves > 10) {
+                for(let i = 0; i < numbers.length; i++) {
+                    if(numbers.indexOf(Math.max(...numbers)) !== i) {
+                        numbers[i] += 1;
+                    }
+                }
+
+                console.log('In WHile');
+                moves += 1;                
+            }
+            
+            console.log(moves);
+        }
+
+        numbers = [3, 4, 6, 6, 4];
+        //countMoves(numbers);
+
+        // for(let i = 0; i < numbers.length; i++) {
+        //     if(numbers.indexOf(Math.max(...numbers)) !== i) {
+        //         numbers[i] += 1;
+        //     }
+        // }
+        console.log(numbers)
+        console.log(numbers.indexOf(Math.max(...numbers)))
+
+        // if(numbers.every(item => item === numbers[0])) {
+        //     console.log('True');
+        // } else {
+        //     console.log('False')
+        // }
+        
+    </script>
+</body>
+</html>
